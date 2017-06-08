@@ -2,9 +2,24 @@
 <html>
 <head>
 	<title>David's Neighbourhood Map Udacity project</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
+    <div class="container">
 
+      <div class="listings">
+        <h1>David's Favourite local restaurants</h1>
+      </div>
+
+      <div id="map"></div>
+
+    </div>	
+
+
+	<script src="js/lib/knockout-3.4.2.js"></script>
+	<script src="js/app.js"></script>
+	<script async defer
+     src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry,drawing&key=AIzaSyAOkdpYuKN5jZWQlaTyRbC1KNgOxtV29yo&v=3&callback=initMap">
+   </script>
 </body>
 </html>
