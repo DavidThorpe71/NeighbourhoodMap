@@ -15,6 +15,10 @@
 
       }
 
+      ul {
+        list-style-type: none;
+      }
+
       #map {
         bottom:0px;
         height: 100%;
