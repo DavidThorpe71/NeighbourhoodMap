@@ -9,8 +9,11 @@
 
       <div class="listings">
         <h1>David's Favourite local restaurants</h1>
+        <ul data-bind="foreach: Location">
+        	<li data-bind="text: name"></li>
+        </ul>
       </div>
-
+		
       <div id="map"></div>
 
     </div>	

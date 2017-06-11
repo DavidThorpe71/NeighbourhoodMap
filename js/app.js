@@ -1,14 +1,41 @@
 // Model
+var initialLocations = [
+	{
+		name: 'Mangal 2'
+	},
+	{
+		name: 'Dukes Brew & Que'
+	},
+	{
+		name: 'Honest Burgers - Dalston'
+	},
+	{
+		name: 'Berber & Q - Grill House'
+	},
+	{
+		name: 'Rudies'
+	}
+];
 
-
+function Location(data) {
+	var self = this;
+	self.name = ko.observable(data.name);
+}
 
 // View Model
 
-var ViewModel = function() {
+var LocationsViewModel = function() {
+	var self = this;
 
-}
+	this.locationList = ko.observableArray([]);
 
-ko.applyBindings(new ViewModel());
+	initialLocations.forEach(function(locationItem) {
+		self.locationList.push( new Location(locationItem) );
+	});
+	
+};
+
+ko.applyBindings(new LocationsViewModel());
 
 // Maps API
 
@@ -20,3 +47,6 @@ function initMap() {
         zoom: 15,
     });
 }
+
+
+
