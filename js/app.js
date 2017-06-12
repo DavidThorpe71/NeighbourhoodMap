@@ -45,6 +45,9 @@ var LocationsViewModel = function() {
 	};
 };
 
+
+
+
 ko.applyBindings(new LocationsViewModel());
 
 // Maps API
@@ -104,50 +107,64 @@ function initMap() {
         zoom: 14,
         styles: styles
     });
-        
-    // The following group uses the location array to create an array of markers on initialize.
-	for (var i = 0; i < initialLocations.length; i++) {
-          // Get the position from the location array.
-          var position = initialLocations[i].location;
-          var title = initialLocations[i].name;
-          // Create a marker per location, and put into markers array.
-          var marker = new google.maps.Marker({
-            position: position,
-            title: title,
-            animation: google.maps.Animation.DROP,
-            id: i
-          });
 
-          google.maps.event.addListener(marker, 'click', function() {
-          	toggleBounce(marker);
-          })
-          // Push the marker to our array of markers.
-          markers.push(marker);
-    }
-
-    
-
-  	function toggleBounce(marker) {
-		if (marker.getAnimation() !== null) {
-			marker.setAnimation(null);
-		} else {
-	    	marker.setAnimation(google.maps.Animation.BOUNCE);
-	  	}
+    var largeInfowindow = new google.maps.InfoWindow();
+     
+    function createMarker(position, title) {
+    	position = initialLocations[i].location;
+    	title = initialLocations[i].name;
+    	var marker = new google.maps.Marker({
+    		map: map,
+    		position: position,
+    		title: title,
+    		animation: google.maps.Animation.DROP,
+    	});
+	
+		google.maps.event.addListener(marker, 'click', function() {
+  			toggleBounce(marker);
+  			infowindow.open(map, this);
+		});
+		return marker;
 	}
-   
-    // This function will loop through the markers array and display them all.
-    function showListings() {
-        var bounds = new google.maps.LatLngBounds();
-        // Extend the boundaries of the map for each marker and display the marker
-        for (var i = 0; i < markers.length; i++) {
-        	markers[i].setMap(map);
-        	bounds.extend(markers[i].position);
-        }
-        map.fitBounds(bounds);
-      }
 
-    showListings();
+	for (var i = 0; i < initialLocations.length; i++) {
+		initialLocations[i].marker = createMarker(initialLocations[i].location, initialLocations[i].name);
+	}   
+
 }
 
 
+
+
+// This function populates the infowindow when the marker is clicked. We'll only allow
+// one infowindow which will open at the marker that is clicked, and populate based
+// on that markers position.
+function populateInfoWindow(marker, infowindow) {
+    // Check to make sure the infowindow is not already opened on this marker.
+    if (infowindow.marker != marker) {
+      	// Clear the infowindow content to give the streetview time to load.
+      	infowindow.setContent('');
+      	infowindow.marker = marker;
+      	// Make sure the marker property is cleared if the infowindow is closed.
+      	infowindow.addListener('closeclick', function() {
+        	infowindow.marker = null;
+     	 });
+      	
+     	// Open the infowindow on the correct marker.
+      	infowindow.open(map, marker);
+   	}
+}
+
+
+
+
+function toggleBounce(marker) {
+	if (marker.getAnimation() !== null) {
+			marker.setAnimation(null);
+	} else {
+	    marker.setAnimation(google.maps.Animation.BOUNCE);
+	}
+}
+
+	        
 
