@@ -8,8 +8,9 @@
     <div class="container">
 
       <div class="listings">
-        <h1>David's Favourite local restaurants</h1>
-        <ul data-bind="foreach: initialLocations">
+        <h1>Dalston restaurants</h1>
+        <p><input data-bind="textInput: filter" /></p>
+        <ul data-bind="foreach: locations">
         	<li data-bind="text: name, click: $parent.setLocation"></li>
         </ul>
       </div>

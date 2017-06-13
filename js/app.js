@@ -1,5 +1,5 @@
-// Model
-var initialLocations = [
+// locations
+var locations = [
 	{
 		name: 'Mangal 2',
 		location: {lat: 51.5498958, lng: -0.0755666}
@@ -22,33 +22,72 @@ var initialLocations = [
 	}
 ];
 
+
+// this function creates the locations
 function Location(data) {
 	var self = this;
 	self.name = ko.observable(data.name);
+	self.location = ko.observable(data.location);
+}
+
+function query(data) {
+	var self = this;
+	self.query = ko.observable()
 }
 
 // View Model
-var LocationsViewModel = function() {
+var viewModel = function() {
 	var self = this;
 
-	this.locationList = ko.observableArray([]);
+	// creates an array for storing locations
+	self.locationList = ko.observableArray([]);
 
-	initialLocations.forEach(function(locationItem) {
-		self.locationList.push( new Location(locationItem) );
+
+
+	// sets the current location onclick
+	self.currentLocation = ko.observable( self.locationList()[0] )
+
+	// self.setLocation = function(clickedLocation) {
+	// 	self.currentLocation(clickedLocation);
+	// 	// prints currentLocation to the console
+	// 	console.log(clickedLocation.name);
+	// };
+
+	self.filter = ko.observable("rudies");
+
+	self.filteredItems = ko.computed(function() {
+		var query = self.filter().toLowerCase();
+	    if (!query) {
+	        return self.locationList();
+	    } else {
+	        return ko.utils.arrayFilter(self.locationList(), function(item) {
+	            return locations.indexOf(query) > -1 ;
+	        });
+	    
+	    }
+	});
+	// pushes each location into locationList array
+	locations.forEach(function(item) {
+		self.locationList.push( new Location(item) );
 	});
 
-	this.currentLocation = ko.observable( this.locationList()[0] )
 
-	this.setLocation = function(clickedLocation) {
-		self.currentLocation(clickedLocation);
-		console.log(clickedLocation.name);
-	};
+	
+
+	// google.maps.filteredItems.Marker
+	// this.filteredItems = ko.computed(function() {
+	// 	var filter = this.filter().toLowerCase();
+	// 	if (!filter) {
+	// 		return this.items();
+	// 	} else {
+	// 		return ko.utils.indexOf()
+	// 		})
+	// 	}
+	// })
 };
 
 
-
-
-ko.applyBindings(new LocationsViewModel());
+ko.applyBindings(new viewModel());
 
 // Maps API
 var map;
@@ -57,114 +96,101 @@ var markers = [];
 
 function initMap() {
 	// Styles taken from Snazzy Maps: https://snazzymaps.com/style/77/clean-cut
-	var styles = [
-	    {
-	        "featureType": "road",
-	        "elementType": "geometry",
-	        "stylers": [
-	            {
-	                "lightness": 100
-	            },
-	            {
-	                "visibility": "simplified"
-	            }
-	        ]
-	    },
-	    {
-	        "featureType": "water",
-	        "elementType": "geometry",
-	        "stylers": [
-	            {
-	                "visibility": "on"
-	            },
-	            {
-	                "color": "#C6E2FF"
-	            }
-	        ]
-	    },
-	    {
-	        "featureType": "poi",
-	        "elementType": "geometry.fill",
-	        "stylers": [
-	            {
-	                "color": "#C5E3BF"
-	            }
-	        ]
-	    },
-	    {
-	        "featureType": "road",
-	        "elementType": "geometry.fill",
-	        "stylers": [
-	            {
-	                "color": "#D1D1B8"
-	            }
-	        ]
-	    }
-	];
+	// var styles = [
+	//     {
+	//         "featureType": "road",
+	//         "elementType": "geometry",
+	//         "stylers": [
+	//             {
+	//                 "lightness": 100
+	//             },
+	//             {
+	//                 "visibility": "simplified"
+	//             }
+	//         ]
+	//     },
+	//     {
+	//         "featureType": "water",
+	//         "elementType": "geometry",
+	//         "stylers": [
+	//             {
+	//                 "visibility": "on"
+	//             },
+	//             {
+	//                 "color": "#C6E2FF"
+	//             }
+	//         ]
+	//     },
+	//     {
+	//         "featureType": "poi",
+	//         "elementType": "geometry.fill",
+	//         "stylers": [
+	//             {
+	//                 "color": "#C5E3BF"
+	//             }
+	//         ]
+	//     },
+	//     {
+	//         "featureType": "road",
+	//         "elementType": "geometry.fill",
+	//         "stylers": [
+	//             {
+	//                 "color": "#D1D1B8"
+	//             }
+	//         ]
+	//     }
+	// ];
 
 	map = new google.maps.Map(document.getElementById('map'), {
     	center: {lat: 51.546207, lng: -0.075643},
         zoom: 14,
-        styles: styles
+        // styles: styles
     });
 
     var largeInfowindow = new google.maps.InfoWindow();
-     
-    function createMarker(position, title) {
-    	position = initialLocations[i].location;
-    	title = initialLocations[i].name;
+    // this section creates an array of markers from the locations array on initialize
+    for (var i = 0; i < locations.length; i++) {
+    	// get the position and title from the locations array
+    	position = locations[i].location;
+    	title = locations[i].name;
+    	// create a marker per location
     	var marker = new google.maps.Marker({
     		map: map,
     		position: position,
     		title: title,
     		animation: google.maps.Animation.DROP,
+    		id: i
     	});
-	
-		google.maps.event.addListener(marker, 'click', function() {
-  			toggleBounce(marker);
-  			infowindow.open(map, this);
+		// Push the marker to array of markers
+		markers.push(marker);
+		// create onclick event to open infowindow at each marker
+		marker.addListener('click', function() {
+			populateInfoWindow(this, largeInfowindow);
 		});
-		return marker;
+	}
+	
+	// This function populates the infowindow when the marker is clicked. We'll only allow
+	// one infowindow which will open at the marker that is clicked, and populate based
+	// on that markers position.
+	function populateInfoWindow(marker, infowindow) {
+	    // Check to make sure the infowindow is not already opened on this marker.
+	    if (infowindow.marker != marker) {
+      	   	infowindow.marker = marker;
+	      	infowindow.setContent('<div>' + marker.title + '<div');
+	      	infowindow.open(map, marker);
+	      	// Make sure the marker property is cleared if the infowindow is closed.
+	      	infowindow.addListener('closeclick', function() {
+	        	infowindow.marker = null;
+	     	 });
+	   	}
 	}
 
-	for (var i = 0; i < initialLocations.length; i++) {
-		initialLocations[i].marker = createMarker(initialLocations[i].location, initialLocations[i].name);
-	}   
-
 }
 
-
-
-
-// This function populates the infowindow when the marker is clicked. We'll only allow
-// one infowindow which will open at the marker that is clicked, and populate based
-// on that markers position.
-function populateInfoWindow(marker, infowindow) {
-    // Check to make sure the infowindow is not already opened on this marker.
-    if (infowindow.marker != marker) {
-      	// Clear the infowindow content to give the streetview time to load.
-      	infowindow.setContent('');
-      	infowindow.marker = marker;
-      	// Make sure the marker property is cleared if the infowindow is closed.
-      	infowindow.addListener('closeclick', function() {
-        	infowindow.marker = null;
-     	 });
-      	
-     	// Open the infowindow on the correct marker.
-      	infowindow.open(map, marker);
-   	}
-}
-
-
-
-
-function toggleBounce(marker) {
-	if (marker.getAnimation() !== null) {
-			marker.setAnimation(null);
-	} else {
-	    marker.setAnimation(google.maps.Animation.BOUNCE);
-	}
-}
-
-	        
-
+// function toggleBounce(marker) {
+// 	if (marker.getAnimation() !== null) {
+// 			marker.setAnimation(null);
+// 	} else {
+// 	    marker.setAnimation(google.maps.Animation.BOUNCE);
+// 	}
+// }
