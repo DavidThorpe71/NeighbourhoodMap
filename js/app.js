@@ -42,7 +42,12 @@ var viewModel = function() {
 	// creates an array for storing locations
 	self.locationList = ko.observableArray([]);
 
-
+	//Look into using a Knockout.js computed observable to store the locations
+	//that will be shown in the list view. A computed observable is dependent 
+	// on one or more observables, and automatically updates whenever any of 
+	// these dependencies change. You can make it depedent on your query 
+	// observable and the function will automatically update the list view 
+	// whenever the query value changes 
 
 	// sets the current location onclick
 	self.currentLocation = ko.observable( self.locationList()[0] )
@@ -63,7 +68,7 @@ var viewModel = function() {
 	        return ko.utils.arrayFilter(self.locationList(), function(item) {
 	            return locations.indexOf(query) > -1 ;
 	        });
-	    
+
 	    }
 	});
 	// pushes each location into locationList array
