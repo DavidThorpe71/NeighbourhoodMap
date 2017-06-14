@@ -58,7 +58,7 @@ var viewModel = function() {
 	// 	console.log(clickedLocation.name);
 	// };
 
-	self.filter = ko.observable("rudies");
+	self.filter = ko.observable("");
 
 	self.filteredItems = ko.computed(function() {
 		var query = self.filter().toLowerCase();
@@ -154,7 +154,7 @@ function initMap() {
 
     var largeInfowindow = new google.maps.InfoWindow();
     // this section creates an array of markers from the locations array on initialize
-    for (var i = 0; i < locations.length; i++) {
+    var createMarkers = function() {
     	// get the position and title from the locations array
     	position = locations[i].location;
     	title = locations[i].name;
@@ -171,9 +171,13 @@ function initMap() {
 		// create onclick event to open infowindow at each marker
 		marker.addListener('click', function() {
 			populateInfoWindow(this, largeInfowindow);
+			toggleBounce(marker);
 		});
 	}
 	
+	for (i = 0; i < locations.length; i++) {
+		createMarkers(locations[i]);
+	}
 	// This function populates the infowindow when the marker is clicked. We'll only allow
 	// one infowindow which will open at the marker that is clicked, and populate based
 	// on that markers position.
@@ -192,10 +196,10 @@ function initMap() {
 
 }
 
-// function toggleBounce(marker) {
-// 	if (marker.getAnimation() !== null) {
-// 			marker.setAnimation(null);
-// 	} else {
-// 	    marker.setAnimation(google.maps.Animation.BOUNCE);
-// 	}
-// }
+function toggleBounce(marker) {
+	if (marker.getAnimation() !== null) {
+			marker.setAnimation(null);
+	} else {
+	    marker.setAnimation(google.maps.Animation.BOUNCE);
+	}
+}
