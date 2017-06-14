@@ -171,7 +171,7 @@ function initMap() {
 		// create onclick event to open infowindow at each marker
 		marker.addListener('click', function() {
 			populateInfoWindow(this, largeInfowindow);
-			toggleBounce(marker);
+			
 		});
 	}
 	
@@ -186,20 +186,25 @@ function initMap() {
 	    if (infowindow.marker != marker) {
       	   	infowindow.marker = marker;
 	      	infowindow.setContent('<div>' + marker.title + '<div');
+	      	toggleBounce(marker);
 	      	infowindow.open(map, marker);
+	      	
 	      	// Make sure the marker property is cleared if the infowindow is closed.
 	      	infowindow.addListener('closeclick', function() {
 	        	infowindow.marker = null;
+	        	marker.setAnimation(null);
 	     	 });
 	   	}
 	}
 
+	function toggleBounce(marker) {
+		if (marker.getAnimation() !== null) {
+				marker.setAnimation(null);
+		} else {
+		    marker.setAnimation(google.maps.Animation.BOUNCE);
+		}
+	}
+
 }
 
-function toggleBounce(marker) {
-	if (marker.getAnimation() !== null) {
-			marker.setAnimation(null);
-	} else {
-	    marker.setAnimation(google.maps.Animation.BOUNCE);
-	}
-}
+
