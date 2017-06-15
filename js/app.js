@@ -1,24 +1,47 @@
+// twitter api
+window.twttr = (function(d, s, id) {
+	var js, fjs = d.getElementsByTagName(s)[0],
+	t = window.twttr || {};
+	if (d.getElementById(id)) return t;
+	js = d.createElement(s);
+	js.id = id;
+	js.src = "https://platform.twitter.com/widgets.js";
+	fjs.parentNode.insertBefore(js, fjs);
+
+	t._e = [];
+	t.ready = function(f) {
+	t._e.push(f);
+	};
+
+	return t;
+	}(document, "script", "twitter-wjs"));
+
 // locations
 var locations = [
 	{
 		name: 'Mangal 2',
-		location: {lat: 51.5498958, lng: -0.0755666}
+		location: {lat: 51.5498958, lng: -0.0755666},
+		twitter: 'mangal2'
 	},
 	{
 		name: 'Dukes Brew & Que',
-		location: {lat: 51.5389873, lng: -0.0807314}
+		location: {lat: 51.5389873, lng: -0.0807314},
+		twitter: 'DukesJoint'
 	},
 	{
 		name: 'Honest Burgers - Dalston',
-		location: {lat: 51.5487942, lng: -0.0765496}
+		location: {lat: 51.5487942, lng: -0.0765496},
+		twitter: 'honestburgers'
 	},
 	{
 		name: 'Berber & Q - Grill House',
-		location: {lat: 51.5368819, lng: -0.0759053}
+		location: {lat: 51.5368819, lng: -0.0759053},
+		twitter: 'BERBERANDQ'
 	},
 	{
 		name: 'Rudies',
-		location: {lat: 51.5517604, lng: -0.0752843}
+		location: {lat: 51.5517604, lng: -0.0752843},
+		twitter: 'RudiesLondon'
 	}
 ];
 
@@ -35,64 +58,7 @@ function query(data) {
 	self.query = ko.observable()
 }
 
-// View Model
-var viewModel = function() {
-	var self = this;
 
-	// creates an array for storing locations
-	self.locationList = ko.observableArray([]);
-
-	//Look into using a Knockout.js computed observable to store the locations
-	//that will be shown in the list view. A computed observable is dependent 
-	// on one or more observables, and automatically updates whenever any of 
-	// these dependencies change. You can make it depedent on your query 
-	// observable and the function will automatically update the list view 
-	// whenever the query value changes 
-
-	// sets the current location onclick
-	self.currentLocation = ko.observable( self.locationList()[0] )
-
-	// self.setLocation = function(clickedLocation) {
-	// 	self.currentLocation(clickedLocation);
-	// 	// prints currentLocation to the console
-	// 	console.log(clickedLocation.name);
-	// };
-
-	self.filter = ko.observable("");
-
-	self.filteredItems = ko.computed(function() {
-		var query = self.filter().toLowerCase();
-	    if (!query) {
-	        return self.locationList();
-	    } else {
-	        return ko.utils.arrayFilter(self.locationList(), function(item) {
-	            return locations.indexOf(query) > -1 ;
-	        });
-
-	    }
-	});
-	// pushes each location into locationList array
-	locations.forEach(function(item) {
-		self.locationList.push( new Location(item) );
-	});
-
-
-	
-
-	// google.maps.filteredItems.Marker
-	// this.filteredItems = ko.computed(function() {
-	// 	var filter = this.filter().toLowerCase();
-	// 	if (!filter) {
-	// 		return this.items();
-	// 	} else {
-	// 		return ko.utils.indexOf()
-	// 		})
-	// 	}
-	// })
-};
-
-
-ko.applyBindings(new viewModel());
 
 // Maps API
 var map;
@@ -100,52 +66,7 @@ var map;
 var markers = [];
 
 function initMap() {
-	// Styles taken from Snazzy Maps: https://snazzymaps.com/style/77/clean-cut
-	// var styles = [
-	//     {
-	//         "featureType": "road",
-	//         "elementType": "geometry",
-	//         "stylers": [
-	//             {
-	//                 "lightness": 100
-	//             },
-	//             {
-	//                 "visibility": "simplified"
-	//             }
-	//         ]
-	//     },
-	//     {
-	//         "featureType": "water",
-	//         "elementType": "geometry",
-	//         "stylers": [
-	//             {
-	//                 "visibility": "on"
-	//             },
-	//             {
-	//                 "color": "#C6E2FF"
-	//             }
-	//         ]
-	//     },
-	//     {
-	//         "featureType": "poi",
-	//         "elementType": "geometry.fill",
-	//         "stylers": [
-	//             {
-	//                 "color": "#C5E3BF"
-	//             }
-	//         ]
-	//     },
-	//     {
-	//         "featureType": "road",
-	//         "elementType": "geometry.fill",
-	//         "stylers": [
-	//             {
-	//                 "color": "#D1D1B8"
-	//             }
-	//         ]
-	//     }
-	// ];
-
+	
 	map = new google.maps.Map(document.getElementById('map'), {
     	center: {lat: 51.546207, lng: -0.075643},
         zoom: 14,
@@ -158,13 +79,16 @@ function initMap() {
     	// get the position and title from the locations array
     	position = locations[i].location;
     	title = locations[i].name;
+    	twitter = locations[i].twitter;
     	// create a marker per location
     	var marker = new google.maps.Marker({
     		map: map,
     		position: position,
     		title: title,
+    		twitter: twitter,
     		animation: google.maps.Animation.DROP,
-    		id: i
+    		id: i,
+    		show: true
     	});
 		// Push the marker to array of markers
 		markers.push(marker);
@@ -184,10 +108,27 @@ function initMap() {
 	function populateInfoWindow(marker, infowindow) {
 	    // Check to make sure the infowindow is not already opened on this marker.
 	    if (infowindow.marker != marker) {
+
       	   	infowindow.marker = marker;
-	      	infowindow.setContent('<div>' + marker.title + '<div');
+	      	infowindow.setContent('<div>' + marker.title + '<div>' + '<div>Tweets by ' + marker.title + '</div>' + '<div id="timeline"></div>');
+	      	
+
 	      	toggleBounce(marker);
 	      	infowindow.open(map, marker);
+
+	      	twttr.widgets.createTimeline(
+  			{
+    			sourceType: 'profile',
+    			screenName: marker.twitter
+  			},
+  			document.getElementById('timeline'),
+  			{
+				width: '300',
+				height: '250',
+				related: 'twitterdev,twitterapi'
+			}).then(function (el) {
+				console.log('Embedded a timeline.')
+			});
 	      	
 	      	// Make sure the marker property is cleared if the infowindow is closed.
 	      	infowindow.addListener('closeclick', function() {
@@ -207,7 +148,56 @@ function initMap() {
 		    }, 750);
 		}
 	}
-
 }
+
+// View Model
+var viewModel = function() {
+	
+	var self = this;
+
+	// creates an array for storing locations
+	this.locationList = ko.observableArray([]);
+
+	// sets the current location onclick
+	this.currentLocation = ko.observable( this.locationList()[0] )
+
+	self.setLocation = function(clickedLocation) {
+		self.currentLocation(clickedLocation);
+		console.log(clickedLocation.name);
+		// for (i = 0; i > markers.length; i++){
+		// 	if (clickedLocation.name == markers[i].title){
+		// 		google.maps.event.trigger(markers[i], 'click');
+		// 	}
+		// }
+	};
+
+	
+
+
+	this.filter = ko.observable('');
+
+	
+
+	// this.filteredItems = ko.computed(function() {
+
+	// 	var query = self.filter().toLowerCase();	
+
+	// 	for (i = 0; i < self.locationList().length; i++) {
+	// 		if (self.locationList()[i].name().toLowerCase().indexOf(query) > -1) {
+	// 			self.locationList()[i].show(true);
+	// 		} else {
+	// 			self.locationList()[i].show(false);
+	// 		}
+	// 	}
+	// });
+
+	// pushes each location into locationList array
+	locations.forEach(function(item) {
+		self.locationList.push( new Location(item) );
+	});
+};
+
+ko.applyBindings(new viewModel());
+
 
 
