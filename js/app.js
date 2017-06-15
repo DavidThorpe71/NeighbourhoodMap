@@ -114,8 +114,10 @@ function initMap() {
 	      	
 
 	      	toggleBounce(marker);
+	      	
 	      	infowindow.open(map, marker);
 
+	      	// loads twitter timeline for location clicked on
 	      	twttr.widgets.createTimeline(
   			{
     			sourceType: 'profile',
@@ -143,6 +145,7 @@ function initMap() {
 				marker.setAnimation(null);
 		} else {
 		    marker.setAnimation(google.maps.Animation.BOUNCE);
+		    // timeout on bounce so marker bounces only once on click
 		    setTimeout(function(){
 		    	marker.setAnimation(null);
 		    }, 750);
@@ -198,6 +201,3 @@ var viewModel = function() {
 };
 
 ko.applyBindings(new viewModel());
-
-
-
