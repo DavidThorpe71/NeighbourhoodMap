@@ -167,11 +167,11 @@ var viewModel = function() {
 	self.setLocation = function(clickedLocation) {
 		self.currentLocation(clickedLocation);
 		console.log(clickedLocation.name);
-		// for (i = 0; i > markers.length; i++){
-		// 	if (clickedLocation.name == markers[i].title){
-		// 		google.maps.event.trigger(markers[i], 'click');
-		// 	}
-		// }
+		for (i = 0; i < markers.length; i++){
+			if (clickedLocation.name == markers[i].title){
+				google.maps.event.trigger(markers[i], 'click');
+			}
+		}
 	};
 
 	
