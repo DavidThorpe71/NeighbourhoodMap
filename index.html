@@ -7,15 +7,27 @@
 	<meta name="viewport" content="width=device-width,minimum-scale=1">
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
 </head>
 <body>
     <div class="container">
-      <h1>Dalston restaurants</h1>
-      <input data-bind="textInput: filter" placeholder="Filter..." />
-      <ul data-bind="foreach: locations">
-        <li data-bind="text: name, click: $parent.setLocation"></li>
-      </ul>
-      <div id="map" class="col-md-8"></div>
+      <div id="sidenav">
+        <input data-bind="textInput: filter" placeholder="Filter..." />
+        <ul data-bind="foreach: locations">
+          <li data-bind="text: name, click: $parent.setLocation"></li>
+        </ul>
+      </div>
+      <div id="main">
+        <div id="topbar">
+          <div id="pagetitle">
+            <h1>Dalston restaurants</h1>
+          </div>
+          <div id="hamburger" onclick="openNav()">
+            <i class="fa fa-bars fa-2x" aria-hidden="true"></i>
+          </div>
+        </div>
+        <div id="map"></div>
+      </div>
     </div>
 	<script src="js/lib/knockout-3.4.2.js"></script>
 	<script src="js/app.js"></script>

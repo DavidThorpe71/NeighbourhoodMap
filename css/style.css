@@ -2,6 +2,46 @@
 	font-family: 'Noto Sans', sans-serif;
 }
 
-html, body, .container, #map {
-  height: 100%;
+#topbar, #map {
+	width: 100%;
+	background-color: lightblue;
+}
+
+#map {
+	height: 450px;
+}
+
+#topbar {
+	display: flex;
+	justify-content: space-between;
+}
+
+#hamburger {
+	margin: 10px;
+	align-self: center;
+}
+
+#pagetitle {
+	margin-left: 10px;
+}
+
+#sidenav {
+	height: 100%;
+	width: 0;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	overflow-x: hidden;
+	padding-top: 60px;
+	transition: 0.5s;
+}
+
+ul {
+	list-style-type: none;
+}
+
+#main {
+    transition: margin-left .5s;
+    padding: 20px;
 }
