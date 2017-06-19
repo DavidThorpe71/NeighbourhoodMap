@@ -1,3 +1,7 @@
+* {
+	font-family: 'Noto Sans', sans-serif;
+}
+
 html, body, .container, #map {
   height: 100%;
 }
