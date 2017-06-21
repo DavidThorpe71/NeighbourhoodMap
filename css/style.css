@@ -1,24 +1,47 @@
+html, body, .container, #main, #map {
+	height: 100%;
+}
+
 * {
 	font-family: 'Noto Sans', sans-serif;
 }
 
-#topbar, #map {
-	width: 100%;
-	background-color: lightblue;
+body {
+	margin: 0;
 }
 
-#map {
-	height: 450px;
+#topbar, #map {
+	width: 100%;
+	background-color: #81d4fa;
 }
+
 
 #topbar {
 	display: flex;
-	justify-content: space-between;
+/*	justify-content: space-between;*/
+}
+
+#hamburger, #closecross, li {
+	cursor: pointer;
 }
 
 #hamburger {
 	margin: 10px;
+}
+
+.hamburgercontainer {
 	align-self: center;
+}
+
+#closecross {
+	color: #808e95;
+}
+
+.crosscontainer {
+	margin-top: 0.67em;
+	margin-left: 10px;
+	margin-right: 10px;
+	text-align: right;
 }
 
 #pagetitle {
@@ -26,22 +49,47 @@
 }
 
 #sidenav {
+	background-color: #b0bec5;
 	height: 100%;
 	width: 0;
-	position: fixed;
+	position: absolute;
 	z-index: 1;
 	top: 0;
 	left: 0;
 	overflow-x: hidden;
-	padding-top: 60px;
 	transition: 0.5s;
 }
 
 ul {
 	list-style-type: none;
+	margin-left: 10px;
+	padding-left: 0;
+}
+
+li {
+	margin: 10px 0 10px 0;
+}
+
+.inputbox {
+	margin: 10px;
 }
 
 #main {
     transition: margin-left .5s;
-    padding: 20px;
+}
+
+@media only screen and (min-width: 768px) {
+	
+	#sidenav {
+		width: 230px;
+	}
+
+	#hamburger {
+		width: 0;
+		visibility: hidden;
+	}
+
+	#main {
+		margin-left: 230px;
+	} 
 }

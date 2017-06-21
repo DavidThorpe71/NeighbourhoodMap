@@ -1,16 +1,3 @@
-// side menu bar
-/* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
-function openNav() {
-    document.getElementById("sidenav").style.width = "250px";
-    document.getElementById("main").style.marginLeft = "250px";
-}
-
-/* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
-function closeNav() {
-    document.getElementById("sidenav").style.width = "0";
-    document.getElementById("main").style.marginLeft = "0";
-}
-
 // twitter api
 window.twttr = (function(d, s, id) {
 	var js, fjs = d.getElementsByTagName(s)[0],
@@ -55,6 +42,11 @@ var locations = [
 		name: 'Rudies',
 		location: {lat: 51.5517604, lng: -0.0752843},
 		twitter: 'RudiesLondon'
+	},
+	{
+		name: 'Chick \'n\' Sours',
+		location: {lat: 51.541015, lng:-0.075149},
+		twitter: 'ChicknSours'
 	}
 ];
 
@@ -177,14 +169,16 @@ var viewModel = function() {
 	// sets the current location onclick
 	this.currentLocation = ko.observable( this.locationList()[0] )
 
-	self.setLocation = function(clickedLocation) {
+
+	this.setLocation = function(clickedLocation) {
 		self.currentLocation(clickedLocation);
 		console.log(clickedLocation.name);
-		// for (i = 0; i > markers.length; i++){
-		// 	if (clickedLocation.name == markers[i].title){
-		// 		google.maps.event.trigger(markers[i], 'click');
-		// 	}
-		// }
+		for (var i = 0; i < markers.length; i++){
+			if (clickedLocation.name == markers[i].title){
+				google.maps.event.trigger(markers[i], 'click');
+			}
+		}
+		closeNav();
 	};
 
 	
@@ -214,3 +208,21 @@ var viewModel = function() {
 };
 
 ko.applyBindings(new viewModel());
+
+// side menu bar
+/* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
+function openNav() {
+    document.getElementById("sidenav").style.width = "230px";
+    document.getElementById("hamburger").style.width = "0";
+    document.getElementById("hamburger").style.visibility = "hidden";
+    document.getElementById("main").style.marginLeft = "230px";
+
+}
+
+/* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
+function closeNav() {
+    document.getElementById("sidenav").style.width = "0";
+    document.getElementById("hamburger").style.width = "auto";
+    document.getElementById("hamburger").style.visibility = "visible";
+    document.getElementById("main").style.marginLeft = "0";
+}

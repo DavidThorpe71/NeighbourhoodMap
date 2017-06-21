@@ -12,21 +12,27 @@
 <body>
     <div class="container">
       <div id="sidenav">
-        <input data-bind="textInput: filter" placeholder="Filter..." />
+        <div class="crosscontainer">  
+          <i id="closecross" onclick="closeNav()" class="fa fa-times fa-2x" aria-hidden="true"></i>
+        </div>
+        <div class="inputbox">
+          <input data-bind="textInput: filter" placeholder="Filter..." />
+        </div>
         <ul data-bind="foreach: locations">
           <li data-bind="text: name, click: $parent.setLocation"></li>
         </ul>
       </div>
       <div id="main">
         <div id="topbar">
+          <div class="hamburgercontainer">
+            <i id="hamburger" onclick="openNav()" class="fa fa-bars fa-2x" aria-hidden="true"></i>
+          </div>
           <div id="pagetitle">
             <h1>Dalston restaurants</h1>
           </div>
-          <div id="hamburger" onclick="openNav()">
-            <i class="fa fa-bars fa-2x" aria-hidden="true"></i>
-          </div>
         </div>
         <div id="map"></div>
+
       </div>
     </div>
 	<script src="js/lib/knockout-3.4.2.js"></script>
