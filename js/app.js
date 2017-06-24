@@ -182,9 +182,26 @@ var viewModel = function() {
 
 	// Filters which locations and markers are displayed from input box
 	self.searchResults = ko.computed(function() {
-
 		var filter = self.query().toLowerCase();
+		
+		// Filter markers
+		for (i = 0; i < self.locationList().length; i++) {
+		 	if (self.locationList()[i].name().toLowerCase().indexOf(filter) > -1) {
+		 		for (var j = 0; j < markers.length; j++) {
+		 			if (self.locationList()[i].name() == markers[j].title) {
+		 				markers[j].setMap(map); 
+		 			}
+		 		}
+		 	} else {
+		 		for (var j = 0; j < markers.length; j++) {
+		 			if (self.locationList()[i].name() == markers[j].title) {
+		 				markers[j].setMap(null); 
+		 			}
+		 		}
+		 	}
+		 }
 
+		// Filter list
 		if (!filter) {
 			 return self.locationList();
 		} else {
@@ -193,6 +210,7 @@ var viewModel = function() {
 			});
 		}
 	});
+
 };
 
 ko.applyBindings(new viewModel());
