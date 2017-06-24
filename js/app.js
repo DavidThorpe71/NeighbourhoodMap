@@ -58,12 +58,6 @@ function Location(data) {
 	self.location = ko.observable(data.location);
 }
 
-function query(data) {
-	var self = this;
-	self.query = ko.observable()
-}
-
-
 
 // Maps API
 var map;
@@ -93,7 +87,6 @@ function initMap() {
     		twitter: twitter,
     		animation: google.maps.Animation.DROP,
     		id: i,
-    		show: true
     	});
 		// Push the marker to array of markers
 		markers.push(marker);
@@ -164,53 +157,48 @@ var viewModel = function() {
 	var self = this;
 
 	// creates an array for storing locations
-	this.locationList = ko.observableArray([]);
-
-	// sets the current location onclick
-	this.currentLocation = ko.observable( this.locationList()[0] )
-
-
-	this.setLocation = function(clickedLocation) {
-		self.currentLocation(clickedLocation);
-		console.log(clickedLocation.name);
-		for (var i = 0; i < markers.length; i++){
-			if (clickedLocation.name == markers[i].title){
-				google.maps.event.trigger(markers[i], 'click');
-			}
-		}
-		closeNav();
-	};
-
-	
-
-
-	this.filter = ko.observable('');
-
-	
-
-	// this.filteredItems = ko.computed(function() {
-
-	// 	var query = self.filter().toLowerCase();	
-
-	// 	for (i = 0; i < self.locationList().length; i++) {
-	// 		if (self.locationList()[i].name().toLowerCase().indexOf(query) > -1) {
-	// 			self.locationList()[i].show(true);
-	// 		} else {
-	// 			self.locationList()[i].show(false);
-	// 		}
-	// 	}
-	// });
+	self.locationList = ko.observableArray([]);
+	self.query = ko.observable('');
 
 	// pushes each location into locationList array
 	locations.forEach(function(item) {
 		self.locationList.push( new Location(item) );
+	});
+
+	// sets the current location onclick
+	self.currentLocation = ko.observable( self.locationList()[0] );
+
+	self.setLocation = function(clickedLocation) {
+		self.currentLocation(clickedLocation);
+		console.log(clickedLocation.name());
+		for (var i = 0; i < markers.length; i++){
+			if (clickedLocation.name() == markers[i].title){
+				google.maps.event.trigger(markers[i], 'click');
+			}
+		}
+		// closeNav();
+	};
+
+
+	// Filters which locations and markers are displayed from input box
+	self.searchResults = ko.computed(function() {
+
+		var filter = self.query().toLowerCase();
+
+		if (!filter) {
+			 return self.locationList();
+		} else {
+			return ko.utils.arrayFilter(self.locationList(), function(item) {
+				return item.name().toLowerCase().indexOf(filter) > -1;
+			});
+		}
 	});
 };
 
 ko.applyBindings(new viewModel());
 
 // side menu bar
-/* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
+/* Sets the width of the sidenav to 230px and the left margin of the main div to 230px */
 function openNav() {
     document.getElementById("sidenav").style.width = "230px";
     document.getElementById("hamburger").style.width = "0";
@@ -219,7 +207,7 @@ function openNav() {
 
 }
 
-/* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
+/* Sets the width of the sidenav to 0 and the left margin of the main div to 0 */
 function closeNav() {
     document.getElementById("sidenav").style.width = "0";
     document.getElementById("hamburger").style.width = "auto";

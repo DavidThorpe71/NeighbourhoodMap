@@ -16,9 +16,9 @@
           <i id="closecross" onclick="closeNav()" class="fa fa-times fa-2x" aria-hidden="true"></i>
         </div>
         <div class="inputbox">
-          <input data-bind="textInput: filter" placeholder="Filter..." />
+          <input data-bind="textInput: query" placeholder="Filter..." />
         </div>
-        <ul data-bind="foreach: locations">
+        <ul data-bind="foreach: searchResults">
           <li data-bind="text: name, click: $parent.setLocation"></li>
         </ul>
       </div>
