@@ -1,5 +1,9 @@
-html, body, .container, #main, #map {
+html, body, .container, #main, #mapcontainer, #map {
 	height: 100%;
+}
+
+#map {
+	display: block;
 }
 
 * {
