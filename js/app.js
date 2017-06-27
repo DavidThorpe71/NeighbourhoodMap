@@ -64,6 +64,11 @@ var map;
 
 var markers = [];
 
+function googleError() {
+	var map = document.getElementById('map');
+	map.innerHTML = 'Google maps did not load';
+}
+
 function initMap() {
 	
 	map = new google.maps.Map(document.getElementById('map'), {
@@ -176,7 +181,7 @@ var viewModel = function() {
 				google.maps.event.trigger(markers[i], 'click');
 			}
 		}
-		// closeNav();
+		self.closeSideNavi();
 	};
 
 
@@ -211,24 +216,18 @@ var viewModel = function() {
 		}
 	});
 
+	self.openNav = ko.observable(false);
+	self.closeNav = ko.observable(true);
+
+	self.openSideNavi = function() {
+		self.openNav(true);
+		self.closeNav(false);
+	}
+
+	self.closeSideNavi = function() {
+		self.openNav(false);
+		self.closeNav(true);
+	}
 };
 
 ko.applyBindings(new viewModel());
-
-// side menu bar
-/* Sets the width of the sidenav to 230px and the left margin of the main div to 230px */
-function openNav() {
-    document.getElementById("sidenav").style.width = "230px";
-    document.getElementById("hamburger").style.width = "0";
-    document.getElementById("hamburger").style.visibility = "hidden";
-    document.getElementById("main").style.marginLeft = "230px";
-
-}
-
-/* Sets the width of the sidenav to 0 and the left margin of the main div to 0 */
-function closeNav() {
-    document.getElementById("sidenav").style.width = "0";
-    document.getElementById("hamburger").style.width = "auto";
-    document.getElementById("hamburger").style.visibility = "visible";
-    document.getElementById("main").style.marginLeft = "0";
-}
