@@ -83,7 +83,6 @@ function initMap() {
 			position: position,
 			title: title,
 			animation: google.maps.Animation.DROP,
-			id: i,
 		});
 		// Push the marker to array of markers
 		markers.push(marker);
