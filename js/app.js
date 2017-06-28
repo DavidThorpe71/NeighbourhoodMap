@@ -1,52 +1,28 @@
-// twitter api
-window.twttr = (function(d, s, id) {
-	var js, fjs = d.getElementsByTagName(s)[0],
-	t = window.twttr || {};
-	if (d.getElementById(id)) return t;
-	js = d.createElement(s);
-	js.id = id;
-	js.src = "https://platform.twitter.com/widgets.js";
-	fjs.parentNode.insertBefore(js, fjs);
-
-	t._e = [];
-	t.ready = function(f) {
-	t._e.push(f);
-	};
-
-	return t;
-	}(document, "script", "twitter-wjs"));
-
 // locations
 var locations = [
 	{
 		name: 'Mangal 2',
 		location: {lat: 51.5498958, lng: -0.0755666},
-		twitter: 'mangal2'
 	},
 	{
 		name: 'Dukes Brew & Que',
 		location: {lat: 51.5389873, lng: -0.0807314},
-		twitter: 'DukesJoint'
 	},
 	{
-		name: 'Honest Burgers - Dalston',
-		location: {lat: 51.5487942, lng: -0.0765496},
-		twitter: 'honestburgers'
+		name: 'Lucky Chip Burgers',
+		location: {lat: 51.548305, lng: -0.0734864},
 	},
 	{
 		name: 'Berber & Q - Grill House',
 		location: {lat: 51.5368819, lng: -0.0759053},
-		twitter: 'BERBERANDQ'
 	},
 	{
 		name: 'Rudies',
 		location: {lat: 51.5517604, lng: -0.0752843},
-		twitter: 'RudiesLondon'
 	},
 	{
 		name: 'Chick \'n\' Sours',
 		location: {lat: 51.541015, lng:-0.075149},
-		twitter: 'ChicknSours'
 	}
 ];
 
@@ -74,7 +50,6 @@ function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
     	center: {lat: 51.546207, lng: -0.075643},
         zoom: 14,
-        // styles: styles
     });
 
     var largeInfowindow = new google.maps.InfoWindow();
@@ -113,27 +88,62 @@ function initMap() {
 	    if (infowindow.marker != marker) {
 
       	   	infowindow.marker = marker;
-	      	infowindow.setContent('<div>' + marker.title + '<div>' + '<div>Tweets by ' + marker.title + '</div>' + '<div id="timeline"></div>');
+	      
+	      	// FourSquare Ajax
+	      	// URL for foursquare
+	      	var fourSquareURL = 'https://api.foursquare.com/v2/venues/search?ll=' + marker.position.lat() + ',' + marker.position.lng() + '&query=' + marker.title + '&client_id=SS2TRLPAC41IELJPZUGXUYANVRWY3ULRKYF3YKWH4MCR4D0Q&client_secret=04WUI02PCQ4ATGUUGPFSPC5MBQ4BZC230SM0PWJZUDYPXP0K&v=20170628'
+
+	      	var fourSquareRequestTimeOut = setTimeout(function(){
+	      		infowindow.setContent('<div>' + marker.title + '</div>' + '<div>Failed to get a response from FourSquare</div>')
+	      	}, 4000);
+
+	      	$.ajax({
+	      		url: fourSquareURL,
+	      		dataType: 'jsonp',
+	      		success: function( response ) {
+	      			var firstResult = response.response.venues[0] || "";
+
+	      			var phoneNumber = firstResult.contact.formattedPhone;
+      				if (phoneNumber == undefined) {
+	      				var phoneNumber = "Not available on FourSquare";
+	      			};
+
+	      			var url = firstResult.url;
+	      			if (url == undefined) {
+	      				var url = "Not available on FourSquare";
+	      			};
+
+      				// console.log(firstResult);
+      				// console.log(phoneNumber);
+      				// console.log(url);
+
+      				infowindow.setContent('<div>' + marker.title + '</div>' + '<div>Contact details from FourSquare:</div>' + '<div>Phone: ' + phoneNumber + '</div>' + '<div>Website: ' + '<a href="' + url+ '">' + url + '</a>' + '</div>');
+
+	      			toggleBounce(marker);
+	      			infowindow.open(map, marker);
+
+	      			clearTimeout(fourSquareRequestTimeOut);
+	      		}
+	      	});
+
 	      	
 
-	      	toggleBounce(marker);
-	      	
-	      	infowindow.open(map, marker);
 
-	      	// loads twitter timeline for location clicked on
-	      	twttr.widgets.createTimeline(
-  			{
-    			sourceType: 'profile',
-    			screenName: marker.twitter
-  			},
-  			document.getElementById('timeline'),
-  			{
-				width: '300',
-				height: '250',
-				related: 'twitterdev,twitterapi'
-			}).then(function (el) {
-				console.log('Embedded a timeline.')
-			});
+
+	  //     	// loads twitter timeline for location clicked on
+	  //     	twttr.widgets.createTimeline(
+  	// 		{
+   //  			sourceType: 'profile',
+   //  			screenName: marker.twitter
+  	// 		},
+  	// 		document.getElementById('timeline'),
+  	// 		{
+			// 	width: '300',
+			// 	height: '250',
+			// 	related: 'twitterdev,twitterapi'
+			// }).then(function (el) {
+			// 	console.log('Embedded a timeline.')
+			// });
 	      	
 	      	// Make sure the marker property is cleared if the infowindow is closed.
 	      	infowindow.addListener('closeclick', function() {

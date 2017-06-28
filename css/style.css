@@ -37,7 +37,7 @@ body {
 	margin: 10px;
 }
 
-.hamburgercontainer {
+.hamburgercontainer, #pagetitle {
 	align-self: center;
 }
 
@@ -134,5 +134,12 @@ li {
 	
 	h1 {
 		font-size: 1.8em;
+	}
+}
+
+@media only screen and (max-width: 330px) {
+	
+	h1 {
+		font-size: 1.6em;
 	}
 }
