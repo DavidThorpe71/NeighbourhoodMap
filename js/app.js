@@ -121,12 +121,12 @@ function initMap() {
 					var firstResult = response.response.venues[0] || "";
 
 					var phoneNumber = firstResult.contact.formattedPhone;
-					if (phoneNumber == undefined) {
+					if (phoneNumber === undefined) {
 						phoneNumber = "Not available on FourSquare";
 					}
 
 					var url = firstResult.url;
-					if (url == undefined) {
+					if (url === undefined) {
 						url = "Not available on FourSquare";
 					}
 
