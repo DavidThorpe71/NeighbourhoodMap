@@ -112,6 +112,7 @@ function initMap() {
 
 			var fourSquareRequestTimeOut = setTimeout(function() {
 				infowindow.setContent('<div>' + marker.title + '</div>' + '<div>Failed to get a response from FourSquare</div>');
+				infowindow.open(map, marker);
 			}, 4000);
 
 			$.ajax({
@@ -156,13 +157,13 @@ function initMap() {
 			// timeout on bounce so marker bounces only once on click
 			setTimeout(function() {
 				marker.setAnimation(null);
-			}, 750);
+			}, 700);
 		}
 	}
 }
 
 // View Model
-var viewModel = function() {
+var ViewModel = function() {
 
 	var self = this;
 
@@ -199,13 +200,13 @@ var viewModel = function() {
 			if (self.locationList()[i].name().toLowerCase().indexOf(filter) > -1) {
 				for (var j = 0; j < markers.length; j++) {
 					if (self.locationList()[i].name() == markers[j].title) {
-						markers[j].setMap(map);
+						markers[j].setVisible(true);
 					}
 				}
 			} else {
 				for (var k = 0; k < markers.length; k++) {
 					if (self.locationList()[i].name() == markers[k].title) {
-						markers[k].setMap(null);
+						markers[k].setVisible(false);
 					}
 				}
 			}
@@ -236,4 +237,4 @@ var viewModel = function() {
 	};
 };
 
-ko.applyBindings(new viewModel());
+ko.applyBindings(new ViewModel());
