@@ -24,20 +24,20 @@
         <li data-bind="text: name, click: $parent.setLocation"></li>
       </ul>
     </aside>
-    <div id="main" data-bind="css: { 'open-main': openNav() == true, 'close-main': closeNav() == true }">
-      <div id="topbar">
+    <main id="main" data-bind="css: { 'open-main': openNav() == true, 'close-main': closeNav() == true }">
+      <header id="topbar">
         <div class="hamburger-container">
           <i id="hamburger" data-bind="click: openSideNavi, css: { 'open-hamburger': openNav() == true }" class="fa fa-bars fa-lg" aria-hidden="true"></i>
         </div>
         <div id="page-title">
           <h1>Dalston restaurants</h1>
         </div>
-      </div>
-      <div id="map-container">
+      </header>
+      <article id="map-container">
         <div id="map">
         </div>
-      </div>
-    </div>
+      </article>
+    </main>
   </div>
   <script src="js/lib/knockout-3.4.2.js"></script>
   <script src="js/jquery-3.2.1.min.js"></script>
