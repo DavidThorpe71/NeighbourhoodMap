@@ -12,7 +12,7 @@ body,
 }
 
 
-#mapcontainer {
+#map-container {
 	height: calc(100% - 86px);
 }
 
@@ -40,7 +40,7 @@ body {
 
 
 #hamburger,
-#closecross,
+#close-cross,
 li {
 	cursor: pointer;
 }
@@ -51,18 +51,18 @@ li {
 }
 
 
-.hamburgercontainer,
-#pagetitle {
+.hamburger-container,
+#page-title {
 	align-self: center;
 }
 
 
-#closecross {
+#close-cross {
 	color: #808e95;
 }
 
 
-.crosscontainer {
+.cross-container {
 	margin-top: 0.67em;
 	margin-left: 10px;
 	margin-right: 10px;
@@ -70,7 +70,7 @@ li {
 }
 
 
-#pagetitle {
+#page-title {
 	margin-left: 10px;
 }
 
@@ -99,7 +99,7 @@ li {
 }
 
 
-.inputbox {
+.input-box {
 	margin: 10px;
 }
 
@@ -109,34 +109,34 @@ li {
 }
 
 
-.openHamburger {
+.openhamburger {
 	width: 0;
 	visibility: hidden;
 }
 
 
-.closeHamburger {
+.closehamburger {
 	width: auto;
 	visibility: visible;
 }
 
 
-.openSideNav {
+.opensidenav {
 	width: 230px;
 }
 
 
-.closeSideNav {
+.closesidenav {
 	width: 0px;
 }
 
 
-.openMain {
+.openmain {
 	margin-left: 230px;
 }
 
 
-.closeMain {
+.closemain {
 	margin-left: 0;
 }
 

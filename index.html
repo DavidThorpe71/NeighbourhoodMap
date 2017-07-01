@@ -13,27 +13,27 @@
 
 <body>
   <div class="container">
-    <div id="sidenav" data-bind="css: { openSideNav: openNav() == true, closeSideNav: closeNav() == true }">
-      <div class="crosscontainer">
-        <i id="closecross" data-bind="click: closeSideNavi, css: { openHamburger: openNav() == false }" class="fa fa-times fa-lg" aria-hidden="true"></i>
+    <aside id="sidenav" data-bind="css: { opensidenav: openNav() == true, closesidenav: closeNav() == true }">
+      <div class="cross-container">
+        <i id="close-cross" data-bind="click: closeSideNavi, css: { openhamburger: openNav() == false }" class="fa fa-times fa-lg" aria-hidden="true"></i>
       </div>
-      <div class="inputbox">
+      <div class="input-box">
         <input data-bind="textInput: query" placeholder="Filter..." />
       </div>
       <ul data-bind="foreach: searchResults">
         <li data-bind="text: name, click: $parent.setLocation"></li>
       </ul>
-    </div>
-    <div id="main" data-bind="css: { openMain: openNav() == true, closeMain: closeNav() == true }">
+    </aside>
+    <div id="main" data-bind="css: { openmain: openNav() == true, closemain: closeNav() == true }">
       <div id="topbar">
-        <div class="hamburgercontainer">
-          <i id="hamburger" data-bind="click: openSideNavi, css: { openHamburger: openNav() == true }" class="fa fa-bars fa-lg" aria-hidden="true"></i>
+        <div class="hamburger-container">
+          <i id="hamburger" data-bind="click: openSideNavi, css: { openhamburger: openNav() == true }" class="fa fa-bars fa-lg" aria-hidden="true"></i>
         </div>
-        <div id="pagetitle">
+        <div id="page-title">
           <h1>Dalston restaurants</h1>
         </div>
       </div>
-      <div id="mapcontainer">
+      <div id="map-container">
         <div id="map">
         </div>
       </div>
