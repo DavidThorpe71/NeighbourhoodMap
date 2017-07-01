@@ -109,34 +109,34 @@ li {
 }
 
 
-.openhamburger {
+.open-hamburger {
 	width: 0;
 	visibility: hidden;
 }
 
 
-.closehamburger {
+.close-hamburger {
 	width: auto;
 	visibility: visible;
 }
 
 
-.opensidenav {
+.open-sidenav {
 	width: 230px;
 }
 
 
-.closesidenav {
+.close-sidenav {
 	width: 0px;
 }
 
 
-.openmain {
+.open-main {
 	margin-left: 230px;
 }
 
 
-.closemain {
+.close-main {
 	margin-left: 0;
 }
 

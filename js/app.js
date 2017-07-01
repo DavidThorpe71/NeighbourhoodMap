@@ -112,6 +112,7 @@ function initMap() {
 
 			var fourSquareRequestTimeOut = setTimeout(function() {
 				infowindow.setContent('<div>' + marker.title + '</div>' + '<div>Failed to get a response from FourSquare</div>');
+				toggleBounce(marker);
 				infowindow.open(map, marker);
 			}, 4000);
 
